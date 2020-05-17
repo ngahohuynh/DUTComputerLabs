@@ -12,7 +12,9 @@ namespace DUTComputerLabs.API.Helpers
 
             CreateMap<User, UserForDetailed>()
                 .ForMember(dest => dest.Faculty,
-                    opt => opt.MapFrom(src => src.Faculty.Name));
+                    opt => opt.MapFrom(src => src.Faculty.Name))
+                .ForMember(dest => dest.Gender,
+                    opt => opt.MapFrom(src => src.Gender == false ? "Nam" : "Nữ"));
 
             CreateMap<UserForInsert, User>()
                 .ForMember(dest => dest.Password,
