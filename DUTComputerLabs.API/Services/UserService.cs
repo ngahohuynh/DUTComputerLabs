@@ -107,7 +107,7 @@ namespace DUTComputerLabs.API.Services
             var userToUpdate = GetById(id);
 
             if(!string.Equals(userToUpdate.Password, EncryptPassword(password.OldPassword)))
-                throw new BadRequestException($"Old password didn't match");
+                throw new BadRequestException("Mật khẩu cũ không đúng");
 
             userToUpdate.Password = EncryptPassword(password.NewPassword);
             

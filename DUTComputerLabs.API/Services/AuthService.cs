@@ -48,11 +48,11 @@ namespace DUTComputerLabs.API.Services
         public UserToken Login(UserForLogin userForLogin)
         {
             var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => string.Equals(u.Username, userForLogin.Username))
-                ?? throw new BadRequestException("User doesn't Exist");
+                ?? throw new BadRequestException("Người dùng không tồn tại");
 
             if(!VerifyPassword(userForLogin.Password, user.Password))
             {
-                throw new BadRequestException("Wrong password");
+                throw new BadRequestException("Sai mật khẩu. Vui lòng thử lại");
             }
 
             string token = GenerateToken(user.Id, user.Username, user.Role.Name);

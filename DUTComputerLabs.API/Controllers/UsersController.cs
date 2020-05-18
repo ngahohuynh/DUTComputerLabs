@@ -36,7 +36,7 @@ namespace DUTComputerLabs.API.Controllers
         public UserForDetailed GetUser(int id)
         {
             var user = _service.GetUser(id)
-                ?? throw new BadRequestException("User doesn't Exist");
+                ?? throw new BadRequestException("Người dùng không tồn tại");
 
             return user;
         }
@@ -45,7 +45,7 @@ namespace DUTComputerLabs.API.Controllers
         public UserForDetailed AddUser(UserForInsert user)
         {
             if(_service.UsernameExists(user.Username))
-                throw new BadRequestException("Username already Exists");
+                throw new BadRequestException("Username đã tồn tại. Vui lòng nhập Username khác");
 
             var createdUser = _service.AddUser(user);
             return createdUser;
@@ -55,11 +55,11 @@ namespace DUTComputerLabs.API.Controllers
         public UserForDetailed UpdateUser(int id, UserForInsert user)
         {
             var existedUser = _service.GetById(id)
-                ?? throw new BadRequestException("User doesn't Exist");
+                ?? throw new BadRequestException("Người dùng không tồn tại");
 
             if(!string.Equals(user.Username, existedUser.Username))
             {
-                throw new BadRequestException("Cannot change Username");
+                throw new BadRequestException("Không thể thay đổi username");
             }
 
             var updatedUser = _service.UpdateUser(id, user);
@@ -72,7 +72,7 @@ namespace DUTComputerLabs.API.Controllers
         {
             if(!string.Equals(user.Username, _service.GetById(id).Username))
             {
-                throw new BadRequestException("Cannot change Username");
+                throw new BadRequestException("Không thể thay đổi username");
             }
 
             var updatedUser = _service.UpdateUser(id, user);

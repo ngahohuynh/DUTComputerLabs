@@ -10,7 +10,12 @@ namespace DUTComputerLabs.API.Exceptions
         {
             if(context.Exception is BaseException exception)
             {
-                context.Result = new ObjectResult(exception.Message)
+                var errorResult = new 
+                {
+                    Message = exception.Message
+                };
+
+                context.Result = new JsonResult(errorResult)
                 {
                     StatusCode = Convert.ToInt32(exception.StatusCode)
                 };

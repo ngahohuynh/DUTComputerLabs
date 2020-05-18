@@ -51,7 +51,7 @@ namespace DUTComputerLabs.API.Controllers
         public void DeleteComputerLab(int id)
         {
             var labToRemove = _service.GetById(id)
-                ?? throw new BadRequestException("Lab doesn't Exist");
+                ?? throw new BadRequestException("Phòng máy không tồn tại");
 
             _service.Delete(labToRemove);
         }
