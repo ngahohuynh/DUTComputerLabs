@@ -61,7 +61,7 @@ namespace DUTComputerLabs.API.Services
 
         public UserForDetailed GetUser(int id)
         {
-            var user = _context.Users.Include(u => u.Faculty).FirstOrDefault(u => u.Id == id);
+            var user = _context.Users.Include(u => u.Faculty).Include(u => u.Role).FirstOrDefault(u => u.Id == id);
             return _mapper.Map<UserForDetailed>(user);
         }
 

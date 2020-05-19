@@ -24,9 +24,19 @@ namespace DUTComputerLabs.API.Controllers
         [HttpGet]
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
-            labParams.OwnerId = 1;
+            labParams.OwnerId = 2;
 
             var labs = _service.GetComputerLabs(labParams);
+
+            Response.AddPagination(labs.CurrentPage, labs.PageSize, labs.TotalCount, labs.TotalPages);
+
+            return _mapper.Map<IEnumerable<ComputerLabForList>>(labs);
+        }
+
+        [HttpGet("search")]
+        public IEnumerable<ComputerLabForList> SearchComputerLabsForBooking([FromQuery]LabParams labParams)
+        {
+            var labs = _service.SearchComputerLabsForBooking(labParams);
 
             Response.AddPagination(labs.CurrentPage, labs.PageSize, labs.TotalCount, labs.TotalPages);
 

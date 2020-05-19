@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using DUTComputerLabs.API.Data;
@@ -16,6 +18,8 @@ namespace DUTComputerLabs.API.Services
         ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab);
 
         ComputerLabForList UpdateComputerLab(int id, ComputerLabForInsert computerLab);
+
+        PagedList<ComputerLab> SearchComputerLabsForBooking(LabParams labParams);
     }
 
     public class ComputerLabService : Repository<ComputerLab>, IComputerLabService
@@ -51,6 +55,19 @@ namespace DUTComputerLabs.API.Services
             _mapper.Map(computerLab, labToUpdate);
 
             return _mapper.Map<ComputerLabForList>(GetById(id));
+        }
+
+        public PagedList<ComputerLab> SearchComputerLabsForBooking(LabParams labParams)
+        {
+            var labs = _context.ComputerLabs.Include(l => l.Bookings)
+                        .Where(l => CheckValidComputerLab(l.Bookings, labParams.BookingDate, labParams.StartAt, labParams.EndAt));
+            return PagedList<ComputerLab>.Create(labs, labParams.PageNumber, labParams.PageSize);
+        }
+
+        private bool CheckValidComputerLab(ICollection<Booking> bookings, DateTime bookingDate, int startAt, int endAt)
+        {
+            return bookings.Any(b => b.BookingDate.Date == bookingDate.Date && 
+                                    (b.StartAt > endAt || b.EndAt < startAt ));
         }
     }
 }
