@@ -14,7 +14,9 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.Faculty,
                     opt => opt.MapFrom(src => src.Faculty.Name))
                 .ForMember(dest => dest.Gender,
-                    opt => opt.MapFrom(src => src.Gender == false ? "Nam" : "Nữ"));
+                    opt => opt.MapFrom(src => src.Gender == false ? "Nam" : "Nữ"))
+                .ForMember(dest => dest.Role,
+                    opt => opt.MapFrom(src => src.Role.Name));
 
             CreateMap<UserForInsert, User>()
                 .ForMember(dest => dest.Password,
