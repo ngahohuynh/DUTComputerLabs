@@ -70,6 +70,8 @@ namespace DUTComputerLabs.API.Controllers
         [HttpPut("{id}/info")]
         public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
         {
+            //check id of current principal
+
             if(!string.Equals(user.Username, _service.GetById(id).Username))
             {
                 throw new BadRequestException("Không thể thay đổi username");

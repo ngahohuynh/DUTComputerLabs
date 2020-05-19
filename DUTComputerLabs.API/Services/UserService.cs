@@ -29,7 +29,7 @@ namespace DUTComputerLabs.API.Services
 
         IEnumerable<Faculty> GetFaculties();
         
-        UserForDetailed UpdateUserInfo(int id, UserForInsert user);
+        // UserForDetailed UpdateUserInfo(int id, UserForInsert user);
 
         void UpdatePassword(int id, PasswordToUpdate password);
     }
@@ -92,15 +92,17 @@ namespace DUTComputerLabs.API.Services
             return _mapper.Map<UserForDetailed>(GetById(id));
         }
 
-        public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
-        {
-            var userToUpdate = GetById(id);
-            _mapper.Map(user, userToUpdate);
+        // public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
+        // {
+        //     var userToUpdate = GetById(id);
+        //     _mapper.Map(user, userToUpdate);
 
-            _context.SaveChanges();
+        //     userToUpdate.Role = _context.Roles.FirstOrDefault(r => string.Equals(r.Name, user.Role));
 
-            return _mapper.Map<UserForDetailed>(GetById(id));
-        }
+        //     _context.SaveChanges();
+
+        //     return _mapper.Map<UserForDetailed>(GetById(id));
+        // }
 
         public void UpdatePassword(int id, PasswordToUpdate password)
         {
