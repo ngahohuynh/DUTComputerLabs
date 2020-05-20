@@ -23,6 +23,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
+        //Role ADMIN
         public IEnumerable<UserForList> GetUsers([FromQuery]UserParams userParams)
         {
             var users = _service.GetUsers(userParams);
@@ -33,9 +34,11 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("{id}")]
+        // Role user => check principal
         public UserForDetailed GetUser(int id) => _service.GetUser(id);
 
         [HttpPost]
+        //Role ADMIN
         public UserForDetailed AddUser(UserForInsert user)
         {
             if(_service.UsernameExists(user.Username))
@@ -46,6 +49,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPut("{id}")]
+        //Role ADMIN
         public UserForDetailed UpdateUser(int id, UserForInsert user)
         {
             var existedUser = _service.GetById(id)
@@ -62,6 +66,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPut("{id}/info")]
+        //Role user
         public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
         {
             //check id of current principal
@@ -77,18 +82,21 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost("{id}/password")]
+        //all role => check principal
         public void UpdatePassword(int id, [FromBody]PasswordToUpdate password)
         {
             _service.UpdatePassword(id, password);
         }
 
         [HttpDelete("{id}")]
+        //role ADMIN
         public void DeleteUser(int id)
         {
             _service.Delete(_service.GetById(id));
         }
 
         [HttpGet("faculties")]
+        //all role
         public IEnumerable<Faculty> GetFaculties()
         {
             return _service.GetFaculties();

@@ -25,6 +25,7 @@ namespace DUTComputerLabs.API.Controllers
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
             labParams.OwnerId = 2;
+            // Get OwnerId from token
 
             var labs = _service.GetComputerLabs(labParams);
 
@@ -49,6 +50,8 @@ namespace DUTComputerLabs.API.Controllers
         [HttpPost]
         public ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab)
         {
+            //get OwnerId from token
+
             var createdLab = _service.AddComputerLab(computerLab);
             return createdLab;
         }
@@ -56,6 +59,8 @@ namespace DUTComputerLabs.API.Controllers
         [HttpPut("{id}")]
         public ComputerLabForList UpdateComputerLab(int id, ComputerLabForInsert computerLab)
         {
+            //Get OwnerId from token
+
             var updatedLab = _service.UpdateComputerLab(id, computerLab);
             return updatedLab;
         }
@@ -63,6 +68,8 @@ namespace DUTComputerLabs.API.Controllers
         [HttpDelete("{id}")]
         public void DeleteComputerLab(int id)
         {
+            //Get OwnerId from token
+
             var labToRemove = _service.GetById(id)
                 ?? throw new BadRequestException("Phòng máy không tồn tại");
 
