@@ -6,9 +6,9 @@ namespace DUTComputerLabs.API.Helpers
     {
         public int? OwnerId { get; set; }
 
-        public DateTime BookingDate { get; set; }
+        public DateTime BookingDate { get; set; } = DateTime.Now;
 
-        public int StartAt { get; set; } = 1;
+        public int StartAt { get; set; } = 10;
 
         public int EndAt { get; set; } = 10;
     }

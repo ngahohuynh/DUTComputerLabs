@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using DUTComputerLabs.API.Data;
 using DUTComputerLabs.API.Dtos;
+using DUTComputerLabs.API.Exceptions;
 using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Models;
 using DUTComputerLabs.API.Repositories;
@@ -14,6 +15,8 @@ namespace DUTComputerLabs.API.Services
     public interface IComputerLabService : IRepository<ComputerLab>
     {
         PagedList<ComputerLab> GetComputerLabs(LabParams labParams);
+
+        ComputerLabForDetailed GetComputerLab(int id);
 
         ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab);
 
@@ -37,6 +40,13 @@ namespace DUTComputerLabs.API.Services
         {
             var labs = _context.ComputerLabs.Where(l => l.OwnerId == labParams.OwnerId).AsQueryable();
             return PagedList<ComputerLab>.Create(labs, labParams.PageNumber, labParams.PageSize);
+        }
+
+        public ComputerLabForDetailed GetComputerLab(int id)
+        {
+            var lab = _context.ComputerLabs.Include(l => l.Owner).FirstOrDefault(l => l.Id == id)
+                ?? throw new BadRequestException("Phòng máy này không tồn tại");
+            return _mapper.Map<ComputerLabForDetailed>(lab);
         }
 
         public ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab)

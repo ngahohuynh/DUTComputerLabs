@@ -33,6 +33,9 @@ namespace DUTComputerLabs.API.Controllers
             return _mapper.Map<IEnumerable<ComputerLabForList>>(labs);
         }
 
+        [HttpGet("{id}")]
+        public ComputerLabForDetailed GetComputerLab(int id) => _service.GetComputerLab(id);
+
         [HttpGet("search")]
         public IEnumerable<ComputerLabForList> SearchComputerLabsForBooking([FromQuery]LabParams labParams)
         {

@@ -61,7 +61,8 @@ namespace DUTComputerLabs.API.Services
 
         public UserForDetailed GetUser(int id)
         {
-            var user = _context.Users.Include(u => u.Faculty).Include(u => u.Role).FirstOrDefault(u => u.Id == id);
+            var user = _context.Users.Include(u => u.Faculty).Include(u => u.Role).FirstOrDefault(u => u.Id == id)
+                ?? throw new BadRequestException("Người dùng không tồn tại");
             return _mapper.Map<UserForDetailed>(user);
         }
 

@@ -28,6 +28,14 @@ namespace DUTComputerLabs.API.Helpers
 
             CreateMap<ComputerLab, ComputerLabForList>();
 
+            CreateMap<ComputerLab, ComputerLabForDetailed>()
+                .ForMember(dest => dest.Owner,
+                    opt => opt.MapFrom(src => src.Owner.Name))
+                .ForMember(dest => dest.OwnerPhoneNumber,
+                    opt => opt.MapFrom(src => src.Owner.PhoneNumber))
+                .ForMember(dest => dest.OwnerEmail,
+                    opt => opt.MapFrom(src => src.Owner.Email));
+
             CreateMap<ComputerLabForInsert, ComputerLab>();
 
             CreateMap<Booking, BookingForDetailed>()

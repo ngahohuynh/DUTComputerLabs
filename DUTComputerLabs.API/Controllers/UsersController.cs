@@ -33,13 +33,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public UserForDetailed GetUser(int id)
-        {
-            var user = _service.GetUser(id)
-                ?? throw new BadRequestException("Người dùng không tồn tại");
-
-            return user;
-        }
+        public UserForDetailed GetUser(int id) => _service.GetUser(id);
 
         [HttpPost]
         public UserForDetailed AddUser(UserForInsert user)
