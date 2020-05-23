@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - dotnetMVC</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+@* @Html.Partial("Header.cshtml") *@
+<body>
+    
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* <footer class="border-top footer text-muted" style="margin-right: 15px;">
+        <div class="container" style="background-color: #f1f1f163 ; ">
+            <p>&copy; @DateTime.Now.Year; - My ASP.NET Application</p>
+            @* &copy; 2020 - dotnetMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> 
+        </div>
+    </footer> *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
