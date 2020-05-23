@@ -26,7 +26,9 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.Faculty,
                     opt => opt.Ignore());
 
-            CreateMap<ComputerLab, ComputerLabForList>();
+            CreateMap<ComputerLab, ComputerLabForList>()
+                .ForMember(dest => dest.EditMode,
+                    opt => opt.Ignore());
 
             CreateMap<ComputerLab, ComputerLabForDetailed>()
                 .ForMember(dest => dest.Owner,
@@ -44,7 +46,11 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.BookerName,
                     opt => opt.MapFrom(src => src.User.Name));
 
-            CreateMap<BookingForInsert, Booking>();
+            CreateMap<BookingForInsert, Booking>()
+                .ForMember(dest => dest.User,
+                    opt => opt.Ignore())
+                .ForMember(dest => dest.Lab,
+                    opt => opt.Ignore());
         }
         
     }

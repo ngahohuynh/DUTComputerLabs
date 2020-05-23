@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using AutoMapper;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
 using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DUTComputerLabs.API.Controllers
@@ -22,10 +25,12 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
+        // [Authorize]
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
             labParams.OwnerId = 2;
             // Get OwnerId from token
+            // labParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var labs = _service.GetComputerLabs(labParams);
 
@@ -42,9 +47,13 @@ namespace DUTComputerLabs.API.Controllers
         {
             var labs = _service.SearchComputerLabsForBooking(labParams);
 
-            Response.AddPagination(labs.CurrentPage, labs.PageSize, labs.TotalCount, labs.TotalPages);
+            // Response.AddPagination(labs.CurrentPage, labs.PageSize, labs.TotalCount, labs.TotalPages);
+            foreach (var lab in labs)
+            {
+                lab.EditMode = labParams.EditMode;
+            }
 
-            return _mapper.Map<IEnumerable<ComputerLabForList>>(labs);
+            return labs;
         }
 
         [HttpPost]

@@ -22,7 +22,7 @@ namespace DUTComputerLabs.API.Services
 
         ComputerLabForList UpdateComputerLab(int id, ComputerLabForInsert computerLab);
 
-        PagedList<ComputerLab> SearchComputerLabsForBooking(LabParams labParams);
+        IEnumerable<ComputerLabForList> SearchComputerLabsForBooking(LabParams labParams);
     }
 
     public class ComputerLabService : Repository<ComputerLab>, IComputerLabService
@@ -67,11 +67,14 @@ namespace DUTComputerLabs.API.Services
             return _mapper.Map<ComputerLabForList>(GetById(id));
         }
 
-        public PagedList<ComputerLab> SearchComputerLabsForBooking(LabParams labParams)
+        public IEnumerable<ComputerLabForList> SearchComputerLabsForBooking(LabParams labParams)
         {
             var labs = _context.ComputerLabs.Include(l => l.Bookings)
-                        .Where(l => CheckValidComputerLab(l.Bookings, labParams.BookingDate, labParams.StartAt, labParams.EndAt));
-            return PagedList<ComputerLab>.Create(labs, labParams.PageNumber, labParams.PageSize);
+                        // .Where(l => CheckValidComputerLab(l.Bookings, labParams.BookingDate, labParams.StartAt, labParams.EndAt));
+                        .Where(l => !l.Bookings.Any(b => b.BookingDate.Date == labParams.BookingDate.Date
+                                    && ( (b.EndAt >= labParams.StartAt && b.StartAt <= labParams.EndAt)
+                                    || (b.StartAt >= labParams.StartAt && b.StartAt <= labParams.EndAt) ) ));
+            return _mapper.Map<IEnumerable<ComputerLabForList>>(labs);
         }
 
         private bool CheckValidComputerLab(ICollection<Booking> bookings, DateTime bookingDate, int startAt, int endAt)

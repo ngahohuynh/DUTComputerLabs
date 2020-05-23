@@ -1,5 +1,6 @@
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DUTComputerLabs.API.Controllers
@@ -16,6 +17,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public UserToken Login(UserForLogin user) => _service.Login(user);
     }
 }

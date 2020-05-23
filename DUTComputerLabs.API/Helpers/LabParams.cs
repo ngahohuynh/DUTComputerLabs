@@ -8,8 +8,10 @@ namespace DUTComputerLabs.API.Helpers
 
         public DateTime BookingDate { get; set; } = DateTime.Now;
 
-        public int StartAt { get; set; } = 10;
+        public int StartAt { get; set; } = 11;
 
-        public int EndAt { get; set; } = 10;
+        public int EndAt { get; set; } = 11;
+
+        public int EditMode { get; set; }
     }
 }

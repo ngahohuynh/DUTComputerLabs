@@ -13,5 +13,7 @@ namespace DUTComputerLabs.API.Dtos
         public int DamagedComputers { get; set; }
 
         public int Aircons { get; set; }
+
+        public int EditMode { get; set; }
     }
 }
