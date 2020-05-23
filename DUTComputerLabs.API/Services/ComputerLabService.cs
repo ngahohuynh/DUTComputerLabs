@@ -54,6 +54,8 @@ namespace DUTComputerLabs.API.Services
             var labToAdd = _mapper.Map<ComputerLab>(computerLab);
 
             labToAdd.Owner = _context.Users.Find(computerLab.OwnerId);
+            
+            Add(labToAdd);
 
             return _mapper.Map<ComputerLabForList>(labToAdd);
         }
@@ -63,6 +65,7 @@ namespace DUTComputerLabs.API.Services
             var labToUpdate = GetById(id);
 
             _mapper.Map(computerLab, labToUpdate);
+            _context.SaveChanges();
 
             return _mapper.Map<ComputerLabForList>(GetById(id));
         }

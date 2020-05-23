@@ -64,11 +64,13 @@ namespace DUTComputerLabs.API.Services
             var bookingToUpdate = GetById(id)
                 ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
                 
+            _mapper.Map(booking, bookingToUpdate);
+
             bookingToUpdate.User = _context.Users.Find(booking.UserId);
             bookingToUpdate.Lab = _context.ComputerLabs.Find(booking.Lab.Id);
             bookingToUpdate.Status = "Đã cập nhật";
-            
-            _mapper.Map(booking, bookingToUpdate);
+
+            _context.SaveChanges();
         }
     }
 }
