@@ -17,9 +17,9 @@ namespace DUTComputerLabs.API.Services
 
         BookingForDetailed GetBooking(int id);
 
-        BookingForDetailed AddBooking(BookingForInsert booking);
+        void AddBooking(BookingForInsert booking);
 
-        BookingForDetailed UpdateBooking(int id, BookingForInsert booking);
+        void UpdateBooking(int id, BookingForInsert booking);
     }
 
     public class BookingService : Repository<Booking>, IBookingService
@@ -49,7 +49,7 @@ namespace DUTComputerLabs.API.Services
             return _mapper.Map<BookingForDetailed>(booking);
         }
         
-        public BookingForDetailed AddBooking(BookingForInsert booking)
+        public void AddBooking(BookingForInsert booking)
         {
             var bookingToAdd = _mapper.Map<Booking>(booking);
             bookingToAdd.User = _context.Users.Find(booking.UserId);
@@ -57,11 +57,9 @@ namespace DUTComputerLabs.API.Services
             bookingToAdd.Status = "Đã đặt";
 
             Add(bookingToAdd);
-
-            return _mapper.Map<BookingForDetailed>(bookingToAdd);
         }
 
-        public BookingForDetailed UpdateBooking(int id, BookingForInsert booking)
+        public void UpdateBooking(int id, BookingForInsert booking)
         {
             var bookingToUpdate = GetById(id)
                 ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
@@ -71,8 +69,6 @@ namespace DUTComputerLabs.API.Services
             bookingToUpdate.Status = "Đã cập nhật";
             
             _mapper.Map(booking, bookingToUpdate);
-
-            return _mapper.Map<BookingForDetailed>(GetById(id));
         }
     }
 }

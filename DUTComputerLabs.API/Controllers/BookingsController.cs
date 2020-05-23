@@ -23,15 +23,14 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost]
-        public BookingForDetailed AddBooking(BookingForInsert booking)
+        public void AddBooking(BookingForInsert booking)
         {
             booking.UserId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            return _service.AddBooking(booking);
+            _service.AddBooking(booking);
         }
 
         [HttpPut("{id}")]
-        public BookingForDetailed UpdateBooking(int id, BookingForInsert booking)
+        public void UpdateBooking(int id, BookingForInsert booking)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -42,7 +41,7 @@ namespace DUTComputerLabs.API.Controllers
 
             booking.UserId = userId;
 
-            return _service.UpdateBooking(id, booking);
+            _service.UpdateBooking(id, booking);
         }
 
 
