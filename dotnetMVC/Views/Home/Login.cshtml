@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="~/css/Login.css" />
+</head>
+<body background="/images/back3.gif">
+    <form action="action_page.php" method="post">
+  <div class="imgcontainer">
+    <img src="~/images/img_avatar2.jpg" alt="Avatar" class="avatar">
+  </div>
+
+  <div class="container">
+    <label for="uname"><b>Username</b></label><br>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+  </div>
+
+  <div class="container">
+    <label for="psw"><b>Password</b></label><br>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+    </div>
+
+    <div class="container">
+    <button type="submit" onclick="myFunction()">Login</button>
+    <script>
+      function myFunction()
+      {
+        location.replace("/Home/Home");
+      }
+    </script>
+    <label class="psw"> 
+      <input type="checkbox" checked="checked" name="remember"  > Remember me
+    </label>
+  </div>
+    <span class="psw"> <a href="#">Forgot password?</a></span>
+  
+</form>
+</body>
