@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DUTComputerLabs.API.Models;
 
 namespace DUTComputerLabs.API.Repositories
 {
@@ -14,6 +15,8 @@ namespace DUTComputerLabs.API.Repositories
         void Delete(T entity);
 
         // bool Exists(int id);
+
+        User FindUser(string username);
 
         Task<bool> SaveAll();
          

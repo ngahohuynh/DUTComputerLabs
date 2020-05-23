@@ -25,12 +25,9 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
-            labParams.OwnerId = 2;
-            // Get OwnerId from token
-            // labParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            labParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var labs = _service.GetComputerLabs(labParams);
 
@@ -40,9 +37,11 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("{id}")]
+        // for LECTURER
         public ComputerLabForDetailed GetComputerLab(int id) => _service.GetComputerLab(id);
 
         [HttpGet("search")]
+        // for LECTURER
         public IEnumerable<ComputerLabForList> SearchComputerLabsForBooking([FromQuery]LabParams labParams)
         {
             var labs = _service.SearchComputerLabsForBooking(labParams);
@@ -59,16 +58,21 @@ namespace DUTComputerLabs.API.Controllers
         [HttpPost]
         public ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab)
         {
-            //get OwnerId from token
+            computerLab.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var createdLab = _service.AddComputerLab(computerLab);
-            return createdLab;
+            return _service.AddComputerLab(computerLab);
         }
 
         [HttpPut("{id}")]
         public ComputerLabForList UpdateComputerLab(int id, ComputerLabForInsert computerLab)
         {
-            //Get OwnerId from token
+            var ownerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(_service.GetById(id).OwnerId != ownerId)
+            {
+                throw new ForbiddenException("Không có quyền chỉnh sửa phòng máy này");
+            }
+            
+            computerLab.OwnerId = ownerId;
 
             var updatedLab = _service.UpdateComputerLab(id, computerLab);
             return updatedLab;
@@ -77,10 +81,14 @@ namespace DUTComputerLabs.API.Controllers
         [HttpDelete("{id}")]
         public void DeleteComputerLab(int id)
         {
-            //Get OwnerId from token
-
             var labToRemove = _service.GetById(id)
                 ?? throw new BadRequestException("Phòng máy không tồn tại");
+
+            var ownerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(labToRemove.OwnerId != ownerId)
+            {
+                throw new ForbiddenException("Không có quyền xóa phòng máy này");
+            }
 
             _service.Delete(labToRemove);
         }

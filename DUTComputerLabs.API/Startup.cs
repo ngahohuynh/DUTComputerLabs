@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,7 @@ namespace DUTComputerLabs.API
             services.AddControllers(options =>
             {
                 options.Filters.Add(new ExceptionHandler());
+                options.Filters.Add(new AuthorizeFilter());
 
             }).AddNewtonsoftJson(options =>
             {
@@ -84,6 +86,8 @@ namespace DUTComputerLabs.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 

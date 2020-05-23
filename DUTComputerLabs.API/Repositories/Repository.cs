@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DUTComputerLabs.API.Data;
+using DUTComputerLabs.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DUTComputerLabs.API.Repositories
@@ -40,6 +42,11 @@ namespace DUTComputerLabs.API.Repositories
         // {
         //     return _context.Set<T>().Any(item => item.Id == id);
         // }
+
+        public User FindUser(string username)
+        {
+            return (_context as DataContext).Users.FirstOrDefault(u => string.Equals(u.Username, username));
+        }
 
         public async Task<bool> SaveAll()
         {

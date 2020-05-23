@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using AutoMapper;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
@@ -34,8 +36,16 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("{id}")]
-        // Role user => check principal
-        public UserForDetailed GetUser(int id) => _service.GetUser(id);
+        public UserForDetailed GetUser(int id) 
+        {
+            if(!string.Equals(User.FindFirst(ClaimTypes.Role), "ADMIN") 
+                && Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value) != id)
+            {
+                throw new ForbiddenException("Không có quyền xem thông tin người dùng khác");
+            }
+
+            return _service.GetUser(id);
+        }
 
         [HttpPost]
         //Role ADMIN
@@ -66,10 +76,12 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPut("{id}/info")]
-        //Role user
         public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
         {
-            //check id of current principal
+            if(Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value) != id)
+            {
+                throw new ForbiddenException("Không có quyền chỉnh sửa thông tin người dùng khác");
+            }
 
             if(!string.Equals(user.Username, _service.GetById(id).Username))
             {
@@ -82,9 +94,13 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost("{id}/password")]
-        //all role => check principal
         public void UpdatePassword(int id, [FromBody]PasswordToUpdate password)
         {
+            if(Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value) != id)
+            {
+                throw new ForbiddenException("Không có quyền chỉnh sửa thông tin người dùng khác");
+            }
+
             _service.UpdatePassword(id, password);
         }
 
@@ -96,7 +112,6 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("faculties")]
-        //all role
         public IEnumerable<Faculty> GetFaculties()
         {
             return _service.GetFaculties();
