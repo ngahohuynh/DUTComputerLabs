@@ -6,7 +6,7 @@ namespace DUTComputerLabs.API.Dtos
     {
         public int Id { get; set; }
 
-        public string LabName { get; set; }
+        public ComputerLabForDetailed Lab { get; set; }
 
         public string BookerName { get; set; }
 

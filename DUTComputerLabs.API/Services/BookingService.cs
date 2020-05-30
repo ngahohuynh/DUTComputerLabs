@@ -13,7 +13,9 @@ namespace DUTComputerLabs.API.Services
 {
     public interface IBookingService : IRepository<Booking>
     {
-        PagedList<Booking> GetBookings(BookingParams bookingParams);
+        PagedList<Booking> GetBookingsForManager(BookingParams bookingParams);
+
+        PagedList<Booking> GetBookingsForBooker(BookingParams bookingParams);
 
         BookingForDetailed GetBooking(int id);
 
@@ -33,14 +35,22 @@ namespace DUTComputerLabs.API.Services
             _mapper = mapper;
         }
 
-        public PagedList<Booking> GetBookings(BookingParams bookingParams)
+        public PagedList<Booking> GetBookingsForManager(BookingParams bookingParams)
         {
             var bookings = _context.Bookings.Include(b => b.Lab)
-                        .Where(b => b.Lab.OwnerId == bookingParams.OwnerId
-                                    && b.BookingDate.Date == bookingParams.BookingDate.Date)
+                        .Where(b => b.Lab.OwnerId == bookingParams.OwnerId)
+                                    // && b.BookingDate.Date == bookingParams.BookingDate.Date)
                         .AsQueryable();
 
-            return PagedList<Booking>.Create(bookings.AsQueryable(), bookingParams.PageNumber, bookingParams.PageSize);
+            return PagedList<Booking>.Create(bookings, bookingParams.PageNumber, bookingParams.PageSize);
+        }
+
+        public PagedList<Booking> GetBookingsForBooker(BookingParams bookingParams)
+        {
+            var bookings = _context.Bookings.Include(b => b.Lab).ThenInclude(l => l.Owner)
+                .Where(b => b.UserId == bookingParams.BookerId)
+                .AsQueryable();
+            return PagedList<Booking>.Create(bookings, bookingParams.PageNumber, bookingParams.PageSize);
         }
 
         public BookingForDetailed GetBooking(int id)

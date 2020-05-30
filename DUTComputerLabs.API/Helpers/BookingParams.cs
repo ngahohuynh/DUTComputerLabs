@@ -6,6 +6,8 @@ namespace DUTComputerLabs.API.Helpers
     {
         public int? OwnerId { get; set; }
 
+        public int? BookerId { get; set; }
+
         public DateTime BookingDate { get; set; }
     }
 }

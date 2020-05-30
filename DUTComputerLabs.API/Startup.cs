@@ -75,6 +75,7 @@ namespace DUTComputerLabs.API
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IAuthService, AuthService>();
 
+            services.AddScoped<UpdateBookingStatus>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

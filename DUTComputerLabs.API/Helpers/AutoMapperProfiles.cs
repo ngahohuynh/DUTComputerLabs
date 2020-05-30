@@ -41,8 +41,6 @@ namespace DUTComputerLabs.API.Helpers
             CreateMap<ComputerLabForInsert, ComputerLab>();
 
             CreateMap<Booking, BookingForDetailed>()
-                .ForMember(dest => dest.LabName,
-                    opt => opt.MapFrom(src => src.Lab.Name))
                 .ForMember(dest => dest.BookerName,
                     opt => opt.MapFrom(src => src.User.Name));
 

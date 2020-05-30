@@ -4,7 +4,9 @@ using System.Security.Claims;
 using AutoMapper;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
+using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DUTComputerLabs.API.Controllers
@@ -21,6 +23,35 @@ namespace DUTComputerLabs.API.Controllers
             _service = service;
             _mapper = mapper;
         }
+
+        [HttpGet("manager")]
+        [Authorize(Roles = "MANAGER")]
+        [ServiceFilter(typeof(UpdateBookingStatus))]
+        public IEnumerable<BookingForDetailed> GetBookingForManager([FromQuery]BookingParams bookingParams)
+        {
+            bookingParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var bookings = _service.GetBookingsForManager(bookingParams);
+
+            Response.AddPagination(bookings.CurrentPage, bookings.PageSize, bookings.TotalCount, bookings.TotalPages);
+
+            return _mapper.Map<IEnumerable<BookingForDetailed>>(bookings);
+        }
+
+        [HttpGet("booker")]
+        [Authorize(Roles = "LECTURER")]
+        [ServiceFilter(typeof(UpdateBookingStatus))]
+        public IEnumerable<BookingForDetailed> GetBookingForBooker([FromQuery]BookingParams bookingParams)
+        {
+            bookingParams.BookerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var bookings = _service.GetBookingsForBooker(bookingParams);
+
+            Response.AddPagination(bookings.CurrentPage, bookings.PageSize, bookings.TotalCount, bookings.TotalPages);
+
+            return _mapper.Map<IEnumerable<BookingForDetailed>>(bookings);
+        }
+
 
         [HttpPost]
         public void AddBooking(BookingForInsert booking)
