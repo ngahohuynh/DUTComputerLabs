@@ -52,6 +52,19 @@ namespace DUTComputerLabs.API.Controllers
             return _mapper.Map<IEnumerable<BookingForDetailed>>(bookings);
         }
 
+        [HttpGet("pages")]
+        [Authorize(Roles = "LECTURER")]
+        public object GetTotalPages([FromQuery]BookingParams bookingParams)
+        {
+            bookingParams.BookerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var bookings = _service.GetBookingsForBooker(bookingParams);
+
+            return new 
+            {
+                TotalPages = bookings.TotalPages    
+            };
+        }
 
         [HttpPost]
         public void AddBooking(BookingForInsert booking)
@@ -75,6 +88,12 @@ namespace DUTComputerLabs.API.Controllers
             _service.UpdateBooking(id, booking);
         }
 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "MANAGER")]
+        public void DeleteBooking(int id)
+        {
+            _service.DeleteBooking(id);
+        }
 
 
     }

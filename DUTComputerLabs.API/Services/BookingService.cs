@@ -22,6 +22,10 @@ namespace DUTComputerLabs.API.Services
         void AddBooking(BookingForInsert booking);
 
         void UpdateBooking(int id, BookingForInsert booking);
+
+        void DeleteBooking(int id);
+
+        NotificationForDetailed AddNotification(NotificationForInsert notification);
     }
 
     public class BookingService : Repository<Booking>, IBookingService
@@ -81,6 +85,30 @@ namespace DUTComputerLabs.API.Services
             bookingToUpdate.Status = "Đã cập nhật";
 
             _context.SaveChanges();
+        }
+
+        public void DeleteBooking(int id)
+        {
+            var booking = GetById(id)
+                ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
+
+            if(!string.Equals(booking.Status, "Đã hoàn thành"))
+            {
+                throw new BadRequestException("Lịch đặt phòng này chưa hoàn thành");
+            }
+
+            Delete(booking);            
+        }
+
+        public NotificationForDetailed AddNotification(NotificationForInsert notification)
+        {
+            var notificationToAdd = _mapper.Map<Notification>(notification);
+            notificationToAdd.Booking = _context.Bookings.Find(notificationToAdd.BookingId);
+
+            _context.Notifications.Add(notificationToAdd);
+            _context.SaveChanges();
+
+            return _mapper.Map<NotificationForDetailed>(notificationToAdd);
         }
     }
 }

@@ -49,6 +49,12 @@ namespace DUTComputerLabs.API.Helpers
                     opt => opt.Ignore())
                 .ForMember(dest => dest.Lab,
                     opt => opt.Ignore());
+
+            CreateMap<Notification, NotificationForDetailed>();
+
+            CreateMap<NotificationForInsert, Notification>()
+                .ForMember(dest => dest.Booking,
+                    opt => opt.Ignore());
         }
         
     }
