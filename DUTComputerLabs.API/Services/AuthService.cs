@@ -17,15 +17,12 @@ namespace DUTComputerLabs.API.Services
     {
         public string Token { get; set; }
 
-        public int UserId { get; set; }
+        public UserForDetailed User { get; set; }
 
-        public string RoleName { get; set; }
-
-        public UserToken(string token, int userId, string roleName)
+        public UserToken(string token, UserForDetailed user)
         {
             Token = token;
-            UserId = userId;
-            RoleName = roleName;
+            User = user;
         }
     }
 
@@ -57,7 +54,7 @@ namespace DUTComputerLabs.API.Services
 
             string token = GenerateToken(user.Id, user.Username, user.Role.Name);
             
-            return new UserToken(token, user.Id, user.Role.Name);
+            return new UserToken(token, _mapper.Map<UserForDetailed>(user));
         }
 
         private bool VerifyPassword(string password, string hashedPassword)
