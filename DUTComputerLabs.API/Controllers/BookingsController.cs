@@ -74,6 +74,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "LECTURER")]
         public void UpdateBooking(int id, BookingForInsert booking)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -93,6 +94,20 @@ namespace DUTComputerLabs.API.Controllers
         public void DeleteBooking(int id)
         {
             _service.DeleteBooking(id);
+        }
+
+        [HttpPut("cancel/{id}")]
+        [Authorize(Roles = "LECTURER")]
+        public void CancelBooking(int id)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if(_service.GetById(id).UserId != userId)
+            {
+                throw new ForbiddenException("Không có quyền chỉnh sửa lịch đặt phòng này");
+            }
+
+            _service.CancelBooking(id);
         }
 
 

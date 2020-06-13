@@ -25,6 +25,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "MANAGER")]
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
             labParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);

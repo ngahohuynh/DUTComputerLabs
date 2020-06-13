@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -24,6 +25,8 @@ namespace DUTComputerLabs.API.Services
         void UpdateBooking(int id, BookingForInsert booking);
 
         void DeleteBooking(int id);
+
+        void CancelBooking(int id);
 
         NotificationForDetailed AddNotification(NotificationForInsert notification);
     }
@@ -77,6 +80,11 @@ namespace DUTComputerLabs.API.Services
         {
             var bookingToUpdate = GetById(id)
                 ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
+
+            if(bookingToUpdate.BookingDate.CompareTo(DateTime.Now) <= 0)
+            {
+                throw new BadRequestException("Không thể thay đổi lịch đặt phòng sau khi đã hoàn thành");
+            }
                 
             _mapper.Map(booking, bookingToUpdate);
 
@@ -98,6 +106,20 @@ namespace DUTComputerLabs.API.Services
             }
 
             Delete(booking);            
+        }
+
+        public void CancelBooking(int id)
+        {
+            var booking = GetById(id)
+                ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
+
+            if(booking.BookingDate.CompareTo(DateTime.Now) <= 0)
+            {
+                throw new BadRequestException("Không thể thay đổi lịch đặt phòng sau khi đã hoàn thành");
+            }
+
+            booking.Status = "Đã hủy";
+            _context.SaveChanges();            
         }
 
         public NotificationForDetailed AddNotification(NotificationForInsert notification)
