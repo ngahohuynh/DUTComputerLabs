@@ -39,7 +39,7 @@ namespace DUTComputerLabs.API
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddCors();
+            // services.AddCors();
 
             services.AddControllers(options =>
             {
@@ -94,7 +94,7 @@ namespace DUTComputerLabs.API
 
             app.UseRouting();
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            // app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
