@@ -44,7 +44,7 @@ namespace DUTComputerLabs.API.Services
 
         public UserToken Login(UserForLogin userForLogin)
         {
-            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => string.Equals(u.Username, userForLogin.Username))
+            var user = _context.Users.Include(u => u.Role).Include(u => u.Faculty).FirstOrDefault(u => string.Equals(u.Username, userForLogin.Username))
                 ?? throw new BadRequestException("Người dùng không tồn tại");
 
             if(!VerifyPassword(userForLogin.Password, user.Password))
