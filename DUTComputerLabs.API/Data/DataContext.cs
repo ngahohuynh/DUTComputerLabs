@@ -24,6 +24,11 @@ namespace DUTComputerLabs.API.Data
                     .HasOne<Permission>(rp => rp.Permission)
                     .WithMany(p => p.RolePermissions)
                     .HasForeignKey(rp => rp.PermissionId);
+
+            builder.Entity<Booking>()
+                .HasOne<Feedback>(b => b.Feedback)
+                .WithOne(f => f.Booking)
+                .HasForeignKey<Feedback>(f => f.BookingId);
         }
         
         public DbSet<User> Users { get; set; }

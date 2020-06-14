@@ -29,10 +29,7 @@ namespace DUTComputerLabs.API.Models
         public string Description { get; set; }
 
         public virtual ICollection<Notification> Notifications { get; set; }
-
-        public int? FeedbackId { get; set; }
-
-        [ForeignKey("FeedbackId")]
+        
         public virtual Feedback Feedback { get; set; }
     }
 }
