@@ -12,10 +12,10 @@ namespace DUTComputerLabs.API.Models
         [ForeignKey("LabId")]
         public virtual ComputerLab Lab { get; set; }
 
-        public int UserId { get; set; }
+        public int BookingId { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        [ForeignKey("BookingId")]
+        public virtual Booking Booking { get; set; }
 
         public string Content { get; set; }
 
