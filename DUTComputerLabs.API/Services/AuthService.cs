@@ -17,21 +17,12 @@ namespace DUTComputerLabs.API.Services
     {
         public string Token { get; set; }
 
-        public int UserId { get; set; }
+        public UserForDetailed User { get; set; }
 
-        public string Name { get; set; }
-
-        public string Username { get; set; }
-
-        public string RoleName { get; set; }
-
-        public UserToken(string token, int userId, string name, string username, string roleName)
+        public UserToken(string token, UserForDetailed user)
         {
             Token = token;
-            UserId = userId;
-            Name = name;
-            Username = username;
-            RoleName = roleName;
+            User = user;
         }
     }
 
@@ -53,7 +44,7 @@ namespace DUTComputerLabs.API.Services
 
         public UserToken Login(UserForLogin userForLogin)
         {
-            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => string.Equals(u.Username, userForLogin.Username))
+            var user = _context.Users.Include(u => u.Role).Include(u => u.Faculty).FirstOrDefault(u => string.Equals(u.Username, userForLogin.Username))
                 ?? throw new BadRequestException("Người dùng không tồn tại");
 
             if(!VerifyPassword(userForLogin.Password, user.Password))
@@ -63,7 +54,7 @@ namespace DUTComputerLabs.API.Services
 
             string token = GenerateToken(user.Id, user.Username, user.Role.Name);
             
-            return new UserToken(token, user.Id, user.Name, user.Username, user.Role.Name);
+            return new UserToken(token, _mapper.Map<UserForDetailed>(user));
         }
 
         private bool VerifyPassword(string password, string hashedPassword)
