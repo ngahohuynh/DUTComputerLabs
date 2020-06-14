@@ -55,6 +55,8 @@ namespace DUTComputerLabs.API.Helpers
             CreateMap<NotificationForInsert, Notification>()
                 .ForMember(dest => dest.Booking,
                     opt => opt.Ignore());
+
+            CreateMap<Feedback, FeedbackForDetailed>();
         }
         
     }
