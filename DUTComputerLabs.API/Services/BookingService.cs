@@ -56,6 +56,7 @@ namespace DUTComputerLabs.API.Services
         {
             var bookings = _context.Bookings.Include(b => b.Lab).ThenInclude(l => l.Owner)
                 .Where(b => b.UserId == bookingParams.BookerId)
+                .OrderByDescending(b => b.UserId)
                 .AsQueryable();
             return PagedList<Booking>.Create(bookings, bookingParams.PageNumber, bookingParams.PageSize);
         }
