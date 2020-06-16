@@ -29,6 +29,8 @@ namespace DUTComputerLabs.API.Services
         void CancelBooking(int id);
 
         NotificationForDetailed AddNotification(NotificationForInsert notification);
+
+        FeedbackForDetailed AddFeedback(FeedbackForInsert feedback);
     }
 
     public class BookingService : Repository<Booking>, IBookingService
@@ -54,7 +56,7 @@ namespace DUTComputerLabs.API.Services
 
         public PagedList<Booking> GetBookingsForBooker(BookingParams bookingParams)
         {
-            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Lab).ThenInclude(l => l.Owner)
+            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Feedback).Include(b => b.Lab).ThenInclude(l => l.Owner)
                 .Where(b => b.UserId == bookingParams.BookerId)
                 .OrderByDescending(b => b.Id)
                 .AsQueryable();
@@ -126,12 +128,26 @@ namespace DUTComputerLabs.API.Services
         public NotificationForDetailed AddNotification(NotificationForInsert notification)
         {
             var notificationToAdd = _mapper.Map<Notification>(notification);
-            notificationToAdd.Booking = _context.Bookings.Find(notificationToAdd.BookingId);
+            notificationToAdd.Booking = _context.Bookings.Find(notification.BookingId);
 
             _context.Notifications.Add(notificationToAdd);
             _context.SaveChanges();
 
             return _mapper.Map<NotificationForDetailed>(notificationToAdd);
+        }
+
+        public FeedbackForDetailed AddFeedback(FeedbackForInsert feedback)
+        {
+            var feedbackToAdd = _mapper.Map<Feedback>(feedback);
+
+            feedbackToAdd.Booking = _context.Bookings.Find(feedback.BookingId);
+            feedbackToAdd.LabId = feedbackToAdd.Booking.LabId;
+            feedbackToAdd.FeedbackDate = DateTime.Now;
+
+            _context.Feedbacks.Add(feedbackToAdd);
+            _context.SaveChanges();
+
+            return _mapper.Map<FeedbackForDetailed>(feedbackToAdd);
         }
     }
 }

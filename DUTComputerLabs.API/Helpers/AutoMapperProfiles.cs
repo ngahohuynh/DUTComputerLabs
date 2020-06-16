@@ -57,6 +57,8 @@ namespace DUTComputerLabs.API.Helpers
                     opt => opt.Ignore());
 
             CreateMap<Feedback, FeedbackForDetailed>();
+
+            CreateMap<FeedbackForInsert, Feedback>();
         }
         
     }
