@@ -6,6 +6,8 @@ namespace DUTComputerLabs.API.Dtos
     {
         public int Id { get; set; }
 
+        public UserForList User { get; set; }
+
         public string Content { get; set; }
 
         public DateTime FeedbackDate { get; set; }

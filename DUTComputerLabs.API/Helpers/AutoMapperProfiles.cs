@@ -56,7 +56,9 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.Booking,
                     opt => opt.Ignore());
 
-            CreateMap<Feedback, FeedbackForDetailed>();
+            CreateMap<Feedback, FeedbackForDetailed>()
+                .ForMember(dest => dest.User,
+                    opt => opt.MapFrom(src => src.Booking.User));
 
             CreateMap<FeedbackForInsert, Feedback>();
         }

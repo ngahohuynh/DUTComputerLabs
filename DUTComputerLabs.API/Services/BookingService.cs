@@ -29,8 +29,6 @@ namespace DUTComputerLabs.API.Services
         void CancelBooking(int id);
 
         NotificationForDetailed AddNotification(NotificationForInsert notification);
-
-        FeedbackForDetailed AddFeedback(FeedbackForInsert feedback);
     }
 
     public class BookingService : Repository<Booking>, IBookingService
@@ -134,20 +132,6 @@ namespace DUTComputerLabs.API.Services
             _context.SaveChanges();
 
             return _mapper.Map<NotificationForDetailed>(notificationToAdd);
-        }
-
-        public FeedbackForDetailed AddFeedback(FeedbackForInsert feedback)
-        {
-            var feedbackToAdd = _mapper.Map<Feedback>(feedback);
-
-            feedbackToAdd.Booking = _context.Bookings.Find(feedback.BookingId);
-            feedbackToAdd.LabId = feedbackToAdd.Booking.LabId;
-            feedbackToAdd.FeedbackDate = DateTime.Now;
-
-            _context.Feedbacks.Add(feedbackToAdd);
-            _context.SaveChanges();
-
-            return _mapper.Map<FeedbackForDetailed>(feedbackToAdd);
         }
     }
 }

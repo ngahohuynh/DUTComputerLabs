@@ -109,29 +109,5 @@ namespace DUTComputerLabs.API.Controllers
 
             _service.CancelBooking(id);
         }
-
-        [HttpPost("feedback")]
-        [Authorize(Roles = "LECTURER")]
-        public FeedbackForDetailed AddFeedback(FeedbackForInsert feedback)
-        {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            var booking = _service.GetById(feedback.BookingId)
-                ?? throw new BadRequestException("Lịch đặt phòng không tồn tại");
-
-            if(booking.UserId != userId)
-            {
-                throw new ForbiddenException("Không có quyền phản hồi cho lịch đặt phòng này");
-            }
-
-            if(booking.Feedback != null)
-            {
-                throw new BadRequestException("Bạn đã phản hồi cho lịch đặt phòng này");
-            }
-
-            return _service.AddFeedback(feedback);
-        }
-
-
     }
 }
