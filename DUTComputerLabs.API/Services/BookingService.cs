@@ -22,7 +22,7 @@ namespace DUTComputerLabs.API.Services
 
         void AddBooking(BookingForInsert booking);
 
-        void UpdateBooking(int id, BookingForInsert booking);
+        BookingForDetailed UpdateBooking(int id, BookingForInsert booking);
 
         void DeleteBooking(int id);
 
@@ -77,7 +77,7 @@ namespace DUTComputerLabs.API.Services
             Add(bookingToAdd);
         }
 
-        public void UpdateBooking(int id, BookingForInsert booking)
+        public BookingForDetailed UpdateBooking(int id, BookingForInsert booking)
         {
             var bookingToUpdate = GetById(id)
                 ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
@@ -94,6 +94,8 @@ namespace DUTComputerLabs.API.Services
             bookingToUpdate.Status = "Đã cập nhật";
 
             _context.SaveChanges();
+
+            return _mapper.Map<BookingForDetailed>(GetById(id));
         }
 
         public void DeleteBooking(int id)

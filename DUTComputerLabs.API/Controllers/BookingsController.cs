@@ -75,7 +75,7 @@ namespace DUTComputerLabs.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "LECTURER")]
-        public void UpdateBooking(int id, BookingForInsert booking)
+        public BookingForDetailed UpdateBooking(int id, BookingForInsert booking)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -86,7 +86,7 @@ namespace DUTComputerLabs.API.Controllers
 
             booking.UserId = userId;
 
-            _service.UpdateBooking(id, booking);
+            return _service.UpdateBooking(id, booking);
         }
 
         [HttpDelete("{id}")]

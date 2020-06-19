@@ -4,6 +4,7 @@ using System.Security.Claims;
 using AutoMapper;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
+using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,13 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("lab/{id}")]
-        public IEnumerable<FeedbackForDetailed> GetFeedbacksForLab(int id)
+        public IEnumerable<FeedbackForDetailed> GetFeedbacksForLab(int id, [FromQuery]PaginationParams paginationParams)
         {
-            return  _service.GetFeedbacksForLab(id);
+            var feedbacks =  _service.GetFeedbacksForLab(id, paginationParams);
+
+            Response.AddPagination(feedbacks.CurrentPage, feedbacks.PageSize, feedbacks.TotalCount, feedbacks.TotalPages);
+
+            return _mapper.Map<IEnumerable<FeedbackForDetailed>>(feedbacks);
         }
 
         [HttpPost]

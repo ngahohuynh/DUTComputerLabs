@@ -5,6 +5,7 @@ using AutoMapper;
 using DUTComputerLabs.API.Data;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
+using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Models;
 using DUTComputerLabs.API.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace DUTComputerLabs.API.Services
 {
     public interface IFeedbackService : IRepository<Feedback>
     {
-        IEnumerable<FeedbackForDetailed> GetFeedbacksForLab(int labId);
+        PagedList<Feedback> GetFeedbacksForLab(int labId, PaginationParams paginationParams);
         
         FeedbackForDetailed AddFeedback(FeedbackForInsert feedback, int userId);
     }
@@ -29,10 +30,13 @@ namespace DUTComputerLabs.API.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<FeedbackForDetailed> GetFeedbacksForLab(int labId)
+        public PagedList<Feedback> GetFeedbacksForLab(int labId, PaginationParams paginationParams)
         {
-            var feedbacks = _context.Feedbacks.Include(f => f.Booking).ThenInclude(b => b.User).Where(f => f.LabId == labId);
-            return _mapper.Map<IEnumerable<FeedbackForDetailed>>(feedbacks);
+            var feedbacks = _context.Feedbacks.Include(f => f.Booking).ThenInclude(b => b.User)
+                .Where(f => f.LabId == labId)
+                .AsQueryable();
+            
+            return PagedList<Feedback>.Create(feedbacks, paginationParams.PageNumber, paginationParams.PageSize);
         }
         
         public FeedbackForDetailed AddFeedback(FeedbackForInsert feedback, int userId)
