@@ -44,7 +44,7 @@ namespace DUTComputerLabs.API.Services
 
         public PagedList<Booking> GetBookingsForManager(BookingParams bookingParams)
         {
-            var bookings = _context.Bookings.Include(b => b.Lab)
+            var bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
                         .Where(b => b.Lab.OwnerId == bookingParams.OwnerId)
                                     // && b.BookingDate.Date == bookingParams.BookingDate.Date)
                         .AsQueryable();

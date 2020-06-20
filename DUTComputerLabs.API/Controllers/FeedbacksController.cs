@@ -34,6 +34,18 @@ namespace DUTComputerLabs.API.Controllers
             return _mapper.Map<IEnumerable<FeedbackForDetailed>>(feedbacks);
         }
 
+        [HttpGet("lab/{id}/pages")]
+        public object GetTotalPages(int id, [FromQuery]PaginationParams paginationParams)
+        {
+            var feedbacks =  _service.GetFeedbacksForLab(id, paginationParams);
+
+            return new 
+            {
+                TotalPages = feedbacks.TotalPages
+            };
+
+        }
+
         [HttpPost]
         [Authorize(Roles = "LECTURER")]
         public FeedbackForDetailed AddFeedback(FeedbackForInsert feedback)
