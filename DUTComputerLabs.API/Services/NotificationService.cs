@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using DUTComputerLabs.API.Data;
 using DUTComputerLabs.API.Dtos;
+using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Models;
 using DUTComputerLabs.API.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace DUTComputerLabs.API.Services
     {
         IEnumerable<NotificationForDetailed> GetNotificationsForBooker(int bookerId);
 
-        IEnumerable<NotificationForDetailed> GetNotificationsForManger(int managerId);
+        PagedList<Notification> GetNotificationsForManger(int managerId, PaginationParams paginationParams);
 
         void AddNotification(NotificationForInsert notification);        
     }
@@ -38,13 +39,13 @@ namespace DUTComputerLabs.API.Services
             return _mapper.Map<IEnumerable<NotificationForDetailed>>(notifications);
         }
 
-        public IEnumerable<NotificationForDetailed> GetNotificationsForManger(int managerId)
+        public PagedList<Notification> GetNotificationsForManger(int managerId, PaginationParams paginationParams)
         {
             var notifications = _context.Notifications.Include(n => n.Booking).ThenInclude(b => b.Lab)
                                         .Where(n => n.Booking.Lab.OwnerId == managerId)
                                         .OrderByDescending(n => n.Id);
 
-            return _mapper.Map<IEnumerable<NotificationForDetailed>>(notifications);
+            return PagedList<Notification>.Create(notifications, paginationParams.PageNumber, paginationParams.PageSize);
         }
 
         public void AddNotification(NotificationForInsert notification)
