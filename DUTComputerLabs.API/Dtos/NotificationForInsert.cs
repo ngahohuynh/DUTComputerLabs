@@ -6,7 +6,7 @@ namespace DUTComputerLabs.API.Dtos
     {
         public int BookingId { get; set; }
 
-        public string NoticeType { get; set; }
+        public string Content { get; set; }
 
         public DateTime NoticeDate { get; set; } = DateTime.Now;
     }

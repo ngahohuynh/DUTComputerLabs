@@ -77,6 +77,7 @@ namespace DUTComputerLabs.API
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<UpdateBookingStatus>();
         }

@@ -22,7 +22,7 @@ namespace DUTComputerLabs.API.Helpers
             service.GetAll()
                 .Where(b => ( (b.BookingDate < DateTime.Today) 
                     || (b.BookingDate == DateTime.Today && b.EndAt < currentPeriod) )
-                    && !string.Equals(b.Status, "Đã hoàn thành") )
+                    && (!string.Equals(b.Status, "Đã hoàn thành") || !string.Equals(b.Status, "Đã hủy")) )
                 .ToList()
                 .ForEach(b => b.Status = "Đã hoàn thành");
 

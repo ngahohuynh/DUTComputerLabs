@@ -27,8 +27,6 @@ namespace DUTComputerLabs.API.Services
         void DeleteBooking(int id);
 
         void CancelBooking(int id);
-
-        NotificationForDetailed AddNotification(NotificationForInsert notification);
     }
 
     public class BookingService : Repository<Booking>, IBookingService
@@ -46,7 +44,7 @@ namespace DUTComputerLabs.API.Services
         {
             var bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
                         .Where(b => b.Lab.OwnerId == bookingParams.OwnerId)
-                                    // && b.BookingDate.Date == bookingParams.BookingDate.Date)
+                        .OrderByDescending(b => b.Id)
                         .AsQueryable();
 
             return PagedList<Booking>.Create(bookings, bookingParams.PageNumber, bookingParams.PageSize);
@@ -118,22 +116,11 @@ namespace DUTComputerLabs.API.Services
 
             if(booking.BookingDate.CompareTo(DateTime.Now) <= 0)
             {
-                throw new BadRequestException("Không thể thay đổi lịch đặt phòng sau khi đã hoàn thành");
+                throw new BadRequestException("Không thể hủy lịch đặt phòng sau khi đã hoàn thành");
             }
 
             booking.Status = "Đã hủy";
             _context.SaveChanges();            
-        }
-
-        public NotificationForDetailed AddNotification(NotificationForInsert notification)
-        {
-            var notificationToAdd = _mapper.Map<Notification>(notification);
-            notificationToAdd.Booking = _context.Bookings.Find(notification.BookingId);
-
-            _context.Notifications.Add(notificationToAdd);
-            _context.SaveChanges();
-
-            return _mapper.Map<NotificationForDetailed>(notificationToAdd);
         }
     }
 }

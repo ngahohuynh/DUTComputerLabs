@@ -50,7 +50,9 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.Lab,
                     opt => opt.Ignore());
 
-            CreateMap<Notification, NotificationForDetailed>();
+            CreateMap<Notification, NotificationForDetailed>()
+                .ForMember(dest => dest.Content,
+                    opt => opt.MapFrom(src => GenerateNoticeContent(src)));
 
             CreateMap<NotificationForInsert, Notification>()
                 .ForMember(dest => dest.Booking,
@@ -61,6 +63,12 @@ namespace DUTComputerLabs.API.Helpers
                     opt => opt.MapFrom(src => src.Booking.User));
 
             CreateMap<FeedbackForInsert, Feedback>();
+        }
+
+        private string GenerateNoticeContent(Notification notification)
+        {
+            var content = $"Thông báo đối với lịch đặt phòng ngày {notification.Booking.BookingDate.ToString("dd/MM/yyyy")}, tiết {notification.Booking.StartAt}-{notification.Booking.EndAt} tại phòng {notification.Booking.Lab.Name}: {notification.Content}. Vui lòng cập nhật hoặc hủy lịch đặt phòng này.";
+            return content;
         }
         
     }

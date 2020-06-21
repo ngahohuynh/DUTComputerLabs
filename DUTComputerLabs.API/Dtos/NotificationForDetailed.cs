@@ -6,7 +6,9 @@ namespace DUTComputerLabs.API.Dtos
     {
         public int Id { get; set; }
 
-        public string NoticeType { get; set; }
+        public BookingForDetailed Booking { get; set; }
+
+        public string Content { get; set; }
 
         public DateTime NoticeDate { get; set; }
     }
