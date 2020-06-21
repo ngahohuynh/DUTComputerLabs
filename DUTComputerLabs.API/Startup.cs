@@ -89,6 +89,8 @@ namespace DUTComputerLabs.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseDeveloperExceptionPage();
+
             // app.UseHttpsRedirection();
 
             app.UseAuthentication();

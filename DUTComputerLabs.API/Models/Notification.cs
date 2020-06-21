@@ -12,7 +12,7 @@ namespace DUTComputerLabs.API.Models
         [ForeignKey("BookingId")]
         public virtual Booking Booking { get; set; }
 
-        public string NoticeType { get; set; }
+        public string Content { get; set; }
 
         public DateTime NoticeDate { get; set; }
     }

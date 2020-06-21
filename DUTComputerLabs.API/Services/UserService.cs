@@ -53,7 +53,7 @@ namespace DUTComputerLabs.API.Services
 
             if(!string.IsNullOrEmpty(userParams.Name))
             {
-                users = users.Where(u => u.Name.Contains(userParams.Name));
+                users = users.Where(u => u.Name.StartsWith(userParams.Name));
             }
 
             return PagedList<User>.Create(users, userParams.PageNumber, userParams.PageSize);
@@ -84,7 +84,10 @@ namespace DUTComputerLabs.API.Services
 
             _mapper.Map(user, userToUpdate);
 
-            userToUpdate.Password = EncryptPassword(user.Password);
+            if (user.Password != null) 
+            {
+                userToUpdate.Password = EncryptPassword(user.Password);            
+            }
             userToUpdate.Role = _context.Roles.FirstOrDefault(r => string.Equals(r.Name, user.Role));
             userToUpdate.Faculty = _context.Faculties.Find(user.Faculty.Id);
 
@@ -92,18 +95,6 @@ namespace DUTComputerLabs.API.Services
 
             return _mapper.Map<UserForDetailed>(GetById(id));
         }
-
-        // public UserForDetailed UpdateUserInfo(int id, UserForInsert user)
-        // {
-        //     var userToUpdate = GetById(id);
-        //     _mapper.Map(user, userToUpdate);
-
-        //     userToUpdate.Role = _context.Roles.FirstOrDefault(r => string.Equals(r.Name, user.Role));
-
-        //     _context.SaveChanges();
-
-        //     return _mapper.Map<UserForDetailed>(GetById(id));
-        // }
 
         public void UpdatePassword(int id, PasswordToUpdate password)
         {

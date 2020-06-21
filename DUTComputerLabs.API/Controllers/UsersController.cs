@@ -7,6 +7,7 @@ using DUTComputerLabs.API.Exceptions;
 using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Models;
 using DUTComputerLabs.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DUTComputerLabs.API.Controllers
@@ -25,7 +26,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
-        //Role ADMIN
+        [Authorize(Roles = "ADMIN")]
         public IEnumerable<UserForList> GetUsers([FromQuery]UserParams userParams)
         {
             var users = _service.GetUsers(userParams);
@@ -38,7 +39,8 @@ namespace DUTComputerLabs.API.Controllers
         [HttpGet("{id}")]
         public UserForDetailed GetUser(int id) 
         {
-            if(!string.Equals(User.FindFirst(ClaimTypes.Role), "ADMIN") 
+            if(string.Equals(User.FindFirst(ClaimTypes.Role), "MANAGER") 
+                && string.Equals(User.FindFirst(ClaimTypes.Role), "LECTURER") 
                 && Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value) != id)
             {
                 throw new ForbiddenException("Không có quyền xem thông tin người dùng khác");
@@ -48,7 +50,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost]
-        //Role ADMIN
+        [Authorize(Roles = "ADMIN")]
         public UserForDetailed AddUser(UserForInsert user)
         {
             if(_service.UsernameExists(user.Username))
@@ -59,7 +61,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPut("{id}")]
-        //Role ADMIN
+        [Authorize(Roles = "ADMIN")]
         public UserForDetailed UpdateUser(int id, UserForInsert user)
         {
             var existedUser = _service.GetById(id)
@@ -105,7 +107,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        //role ADMIN
+        [Authorize(Roles = "ADMIN")]
         public void DeleteUser(int id)
         {
             _service.Delete(_service.GetById(id));

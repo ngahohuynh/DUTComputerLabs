@@ -1,0 +1,98 @@
+[
+    {
+        "Name": "ADMIN",
+        "Birthday": "01-01-1998",
+        "Gender": 1,
+        "FacultyId": 1,
+        "PhoneNumber": "0788608863",
+        "Email": "hnga3511@gmail.com",
+        "Address": "",
+        "Username": "admin",
+        "Password": "password",
+        "RoleId": 1
+    },
+    {
+        "Name": "Nguyễn Văn Nguyên",
+        "Birthday": "07-09-1974",
+        "Gender": 0,
+        "FacultyId": 1,
+        "PhoneNumber": "0903577986",
+        "Email": "nguyenvannguyen2006@gmail.com",
+        "Address": "123 Lê Lợi, Đà Nẵng",
+        "Username": "nvnguyen",
+        "Password": "password",
+        "RoleId": 2
+    },
+    {
+        "Name": "Mai Văn Hà",
+        "Birthday": "01-07-1978",
+        "Gender": 0,
+        "FacultyId": 1,
+        "PhoneNumber": "0905161888",
+        "Email": "mvha999@gmail.com",
+        "Address": "126 Nguyễn Văn Linh, Đà Nẵng",
+        "Username": "mvha",
+        "Password": "password",
+        "RoleId": 2
+    },
+    {
+        "Name": "Võ Đức Hoàng",
+        "Birthday": "06-10-1983",
+        "Gender": 0,
+        "FacultyId": 1,
+        "PhoneNumber": "0906477283",
+        "Email": "hoangvd.it@dut.udn.vn",
+        "Address": "",
+        "Username": "vdhoang",
+        "Password": "password",
+        "RoleId": 2
+    },
+    {
+        "Name": "Lê Thị Mỹ Hạnh",
+        "Birthday": "09-09-1975",
+        "Gender": 1,
+        "FacultyId": 1,
+        "PhoneNumber": "0905737577",
+        "Email": "ltmhanh@dut.udn.vn",
+        "Address": "",
+        "Username": "ltmhanh",
+        "Password": "password",
+        "RoleId": 3
+    },
+    {
+        "Name": "Bùi Thị Thanh Thanh",
+        "Birthday": "01-12-1988",
+        "Gender": 1,
+        "FacultyId": 1,
+        "PhoneNumber": "0935825915",
+        "Email": "bttthanh@dut.udn.vn",
+        "Address": "",
+        "Username": "bttthanh",
+        "Password": "password",
+        "RoleId": 3
+    },
+    {
+        "Name": "Huỳnh Hữu Hưng",
+        "Birthday": "01-05-1975",
+        "Gender": 0,
+        "FacultyId": 1,
+        "PhoneNumber": "0905444669",
+        "Email": "hhhung@dut.udn.vn",
+        "Address": "",
+        "Username": "hhhung",
+        "Password": "password",
+        "RoleId": 3
+    },
+    {
+        "Name": "Phạm Minh Tuấn",
+        "Birthday": "07-05-1982",
+        "Gender": 0,
+        "FacultyId": 1,
+        "PhoneNumber": "0913230910",
+        "Email": "pmtuan@dut.udn.vn",
+        "Address": "",
+        "Username": "pmtuan",
+        "Password": "password",
+        "RoleId": 3
+    }
+]

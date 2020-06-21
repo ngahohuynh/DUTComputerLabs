@@ -51,6 +51,11 @@ namespace DUTComputerLabs.API.Services
 
         public ComputerLabForList AddComputerLab(ComputerLabForInsert computerLab)
         {
+            if(_context.ComputerLabs.Any(l => string.Equals(l.Name, computerLab.Name)))
+            {
+                throw new BadRequestException("Phòng máy này đã tồn tại");
+            }
+
             var labToAdd = _mapper.Map<ComputerLab>(computerLab);
 
             labToAdd.Owner = _context.Users.Find(computerLab.OwnerId);
