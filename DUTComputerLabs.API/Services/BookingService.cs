@@ -42,10 +42,19 @@ namespace DUTComputerLabs.API.Services
 
         public PagedList<Booking> GetBookingsForManager(BookingParams bookingParams)
         {
-            var bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
+            IQueryable<Booking> bookings;
+
+            if(bookingParams.OwnerId == 8)
+            {
+                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User);
+            }
+            else 
+            {
+                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
                         .Where(b => b.Lab.OwnerId == bookingParams.OwnerId)
                         .OrderByDescending(b => b.Id)
                         .AsQueryable();
+            }
 
             return PagedList<Booking>.Create(bookings, bookingParams.PageNumber, bookingParams.PageSize);
         }
@@ -101,7 +110,7 @@ namespace DUTComputerLabs.API.Services
             var booking = GetById(id)
                 ?? throw new BadRequestException("Lịch đặt phòng này không tồn tại");
 
-            if(!string.Equals(booking.Status, "Đã hoàn thành"))
+            if(booking.BookingDate.CompareTo(DateTime.Now) >= 0)
             {
                 throw new BadRequestException("Lịch đặt phòng này chưa hoàn thành");
             }

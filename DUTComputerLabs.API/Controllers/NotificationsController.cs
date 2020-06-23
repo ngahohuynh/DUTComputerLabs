@@ -33,7 +33,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("manager")]
-        [Authorize(Roles = "MANAGER")]
+        [Authorize(Roles = "ADMIN, MANAGER")]
         public IEnumerable<NotificationForDetailed> GetNotificationsForManager([FromQuery]PaginationParams paginationParams)
         {
             var managerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -46,7 +46,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "MANAGER")]
+        [Authorize(Roles = "ADMIN, MANAGER")]
         public void AddNotification(NotificationForInsert notification) => _service.AddNotification(notification);
     }
 }

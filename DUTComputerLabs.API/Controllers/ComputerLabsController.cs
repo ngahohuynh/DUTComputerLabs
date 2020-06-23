@@ -25,9 +25,10 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "MANAGER")]
+        [Authorize(Roles = "ADMIN, MANAGER")]
         public IEnumerable<ComputerLabForList> GetComputerLabs([FromQuery]LabParams labParams)
         {
+            
             labParams.OwnerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var labs = _service.GetComputerLabs(labParams);
@@ -68,12 +69,14 @@ namespace DUTComputerLabs.API.Controllers
         public ComputerLabForList UpdateComputerLab(int id, ComputerLabForInsert computerLab)
         {
             var ownerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if(_service.GetById(id).OwnerId != ownerId)
+            var labOwner = _service.GetById(id).OwnerId;
+
+            if(ownerId != 8 && labOwner != ownerId)
             {
                 throw new ForbiddenException("Không có quyền chỉnh sửa phòng máy này");
             }
             
-            computerLab.OwnerId = ownerId;
+            computerLab.OwnerId = labOwner;
 
             var updatedLab = _service.UpdateComputerLab(id, computerLab);
             return updatedLab;
@@ -86,7 +89,7 @@ namespace DUTComputerLabs.API.Controllers
                 ?? throw new BadRequestException("Phòng máy không tồn tại");
 
             var ownerId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if(labToRemove.OwnerId != ownerId)
+            if(ownerId != 8 && labToRemove.OwnerId != ownerId)
             {
                 throw new ForbiddenException("Không có quyền xóa phòng máy này");
             }

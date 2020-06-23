@@ -25,7 +25,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpGet("manager")]
-        [Authorize(Roles = "MANAGER")]
+        [Authorize(Roles = "ADMIN, MANAGER")]
         [ServiceFilter(typeof(UpdateBookingStatus))]
         public IEnumerable<BookingForDetailed> GetBookingForManager([FromQuery]BookingParams bookingParams)
         {
@@ -90,7 +90,7 @@ namespace DUTComputerLabs.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "MANAGER")]
+        [Authorize(Roles = "ADMIN, MANAGER")]
         public void DeleteBooking(int id)
         {
             _service.DeleteBooking(id);

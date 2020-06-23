@@ -38,7 +38,17 @@ namespace DUTComputerLabs.API.Services
 
         public PagedList<ComputerLab> GetComputerLabs(LabParams labParams)
         {
-            var labs = _context.ComputerLabs.Where(l => l.OwnerId == labParams.OwnerId).AsQueryable();
+            IQueryable<ComputerLab> labs;
+
+            if(labParams.OwnerId == 8)
+            {
+                labs = _context.ComputerLabs;
+            }
+            else
+            {
+                labs = _context.ComputerLabs.Where(l => l.OwnerId == labParams.OwnerId).AsQueryable();
+            }
+            
             return PagedList<ComputerLab>.Create(labs, labParams.PageNumber, labParams.PageSize);
         }
 
