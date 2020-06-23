@@ -35,7 +35,7 @@ namespace DUTComputerLabs.API.Services
             var notifications = _context.Notifications.Include(n => n.Booking).ThenInclude(b => b.Lab)
                                         .Where(n => n.Booking.UserId == bookerId)
                                         .OrderByDescending(n => n.Id)
-                                        .Take(15);
+                                        .Take(10);
             return _mapper.Map<IEnumerable<NotificationForDetailed>>(notifications);
         }
 

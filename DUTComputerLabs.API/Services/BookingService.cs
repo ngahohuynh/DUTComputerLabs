@@ -116,7 +116,7 @@ namespace DUTComputerLabs.API.Services
                 throw new BadRequestException("Lịch đặt phòng này chưa hoàn thành");
             }
 
-            Delete(booking);            
+            Delete(booking);       
         }
 
         public void CancelBooking(int id)
