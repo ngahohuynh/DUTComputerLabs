@@ -46,12 +46,12 @@ namespace DUTComputerLabs.API.Services
 
             if(bookingParams.OwnerId == 8)
             {
-                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
+                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User).Include(b => b.Feedback)
                         .OrderByDescending(b => b.Id);
             }
             else 
             {
-                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User)
+                bookings = _context.Bookings.Include(b => b.Lab).Include(b => b.User).Include(b => b.Feedback)
                         .Where(b => b.Lab.OwnerId == bookingParams.OwnerId)
                         .OrderByDescending(b => b.Id)
                         .AsQueryable();
