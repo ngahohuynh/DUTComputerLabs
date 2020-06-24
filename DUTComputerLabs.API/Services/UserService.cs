@@ -110,6 +110,12 @@ namespace DUTComputerLabs.API.Services
 
             if(user.Photo != null)
             {
+                if (userToUpdate.PhotoPublicId != null)
+                {
+                    var deleteParams = new DeletionParams(userToUpdate.PhotoPublicId);
+                    _cloudinary.Destroy(deleteParams);
+                }
+
                 var uploadResult = UploadPhoto(user.Photo);
                 userToUpdate.PhotoUrl = uploadResult.Url.ToString();
                 userToUpdate.PhotoPublicId = uploadResult.PublicId;
