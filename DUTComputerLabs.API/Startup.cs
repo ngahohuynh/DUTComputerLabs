@@ -65,6 +65,8 @@ namespace DUTComputerLabs.API
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:SecretKey").Value))
                 });
+                
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             var mappingCfg = new MapperConfiguration(mc =>
             {

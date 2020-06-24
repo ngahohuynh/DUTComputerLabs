@@ -7,6 +7,8 @@ namespace DUTComputerLabs.API.Dtos
     {
         public string Name { get; set; }
 
+        public string Photo { get; set; }
+
         public DateTime Birthday { get; set; }
 
         public bool Gender { get; set; }

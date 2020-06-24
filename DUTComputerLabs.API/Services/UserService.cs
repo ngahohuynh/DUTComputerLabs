@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using DUTComputerLabs.API.Data;
 using DUTComputerLabs.API.Dtos;
 using DUTComputerLabs.API.Exceptions;
@@ -12,6 +15,7 @@ using DUTComputerLabs.API.Helpers;
 using DUTComputerLabs.API.Models;
 using DUTComputerLabs.API.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DUTComputerLabs.API.Services
 {
@@ -38,11 +42,22 @@ namespace DUTComputerLabs.API.Services
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
+        private Cloudinary _cloudinary;
 
-        public UserService(DataContext context, IMapper mapper) : base(context)
+        public UserService(DataContext context, IMapper mapper, IOptions<CloudinarySettings> cloudinaryConfig) : base(context)
         {
             _context = context;
             _mapper = mapper;
+            _cloudinaryConfig = cloudinaryConfig;
+
+            Account acc = new Account(
+                _cloudinaryConfig.Value.CloudName,
+                _cloudinaryConfig.Value.ApiKey,
+                _cloudinaryConfig.Value.ApiSecret
+            );
+
+            _cloudinary = new Cloudinary(acc);
         }
 
         public PagedList<User> GetUsers(UserParams userParams)
@@ -72,6 +87,8 @@ namespace DUTComputerLabs.API.Services
             userToAdd.Password = EncryptPassword(user.Password);
             userToAdd.Role = _context.Roles.FirstOrDefault(r => string.Equals(r.Name, user.Role));
             userToAdd.Faculty = _context.Faculties.Find(user.Faculty.Id);
+            userToAdd.PhotoUrl = null;
+            userToAdd.PhotoPublicId = null;
 
             Add(userToAdd);
 
@@ -90,6 +107,13 @@ namespace DUTComputerLabs.API.Services
             }
             userToUpdate.Role = _context.Roles.FirstOrDefault(r => string.Equals(r.Name, user.Role));
             userToUpdate.Faculty = _context.Faculties.Find(user.Faculty.Id);
+
+            if(user.Photo != null)
+            {
+                var uploadResult = UploadPhoto(user.Photo);
+                userToUpdate.PhotoUrl = uploadResult.Url.ToString();
+                userToUpdate.PhotoPublicId = uploadResult.PublicId;
+            }
 
             _context.SaveChanges();
 
@@ -125,6 +149,25 @@ namespace DUTComputerLabs.API.Services
             md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(password));
 
             return Convert.ToBase64String(md5.Hash);
+        }
+
+        private ImageUploadResult UploadPhoto(string content)
+        {
+            var uploadResult = new ImageUploadResult();
+
+            using(var memoryStream = new MemoryStream(Convert.FromBase64String(content)))
+            {
+                var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription($"{Guid.NewGuid()}.jpg", memoryStream),
+                        Transformation = new Transformation()
+                            .Width(500).Height(500).Crop("fill").Gravity("face")
+                    };
+
+                    uploadResult = _cloudinary.Upload(uploadParams);
+            }
+
+            return uploadResult;
         }
     }
 }

@@ -9,6 +9,10 @@ namespace DUTComputerLabs.API.Models
 
         public string Name { get; set; }
 
+        public string PhotoUrl { get; set; }
+
+        public string PhotoPublicId { get; set; }
+
         public DateTime Birthday { get; set; }
 
         public bool Gender { get; set; }

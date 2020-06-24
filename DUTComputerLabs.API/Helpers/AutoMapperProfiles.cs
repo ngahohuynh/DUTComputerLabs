@@ -24,6 +24,10 @@ namespace DUTComputerLabs.API.Helpers
                 .ForMember(dest => dest.Role,
                     opt => opt.Ignore())
                 .ForMember(dest => dest.Faculty,
+                    opt => opt.Ignore())
+                .ForMember(dest => dest.PhotoPublicId,
+                    opt => opt.Ignore())
+                .ForMember(dest => dest.PhotoPublicId,
                     opt => opt.Ignore());
 
             CreateMap<ComputerLab, ComputerLabForList>()
